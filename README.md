@@ -2,7 +2,7 @@
 
 **One prompt in, one of three specialists out.** Medha is a single-interface AI assistant that automatically routes every message to the right specialist agent — no manual switching, no separate tabs, no picking a "mode" yourself.
 
-Built solo, end to end, by **Nikhil Chary Sriramoju** (B.Tech Final Year, CSE).
+Built solo, end to end, by **NIKHIL CHARY SRIRAMOJU** (B.Tech Final Year, CSE).
 
 ---
 
@@ -115,7 +115,7 @@ Every incoming message is passed through a lightweight intent classifier before 
 
 ## 👤 About the Builder
 
-**Nikhil Chary Sriramoju**
+**NIKHIL CHARY SRIRAMOJU**
 B.Tech Final Year — Computer Science & Engineering
 
 - 🔗 LinkedIn: [nikhil-chary-sriramoju](https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a)
