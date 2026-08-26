@@ -13,6 +13,16 @@ Built solo, end to end, by **NIKHIL CHARY SRIRAMOJU** (B.Tech Final Year, CSE).
 
 ---
 
+## 📸 Screenshots
+
+<p align="center">
+  <img src="screenshot-chat.png" width="280" alt="Medha chat interface" />
+  &nbsp;&nbsp;
+  <img src="screenshot-footer.png" width="280" alt="Medha footer" />
+</p>
+
+---
+
 ## 📖 Overview
 
 Most AI chat tools make you choose a mode before you even ask your question — "chat," "search," "code." Medha removes that friction. You type naturally, and an internal router reads your intent and hands the message to the agent best suited to answer it:
