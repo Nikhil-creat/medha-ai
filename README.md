@@ -115,7 +115,7 @@ Every incoming message is passed through a lightweight intent classifier before 
 
 ## 👤 About the Builder
 
-**NIKHIL CHARY SRIRAMOJU**
+**Nikhil Chary Sriramoju**
 B.Tech Final Year — Computer Science & Engineering
 
 - 🔗 LinkedIn: [nikhil-chary-sriramoju](https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a)
