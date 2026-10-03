@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from "react";
 import { Send, Terminal, Github, Linkedin, Mail, Play, Brain, Code2, Search, User, X, Award, GraduationCap, ExternalLink, Instagram } from "lucide-react";
 
 const ACHIEVEMENTS = {
-  academic: [{ label: "CGPA", value: "6.55" }, { label: "Year", value: "Final Year, CSE" }],
+  academic: [{ label: "CGPA", value: "6.58" }, { label: "Year", value: "Final Year, CSE" }],
   simulations: [
     "Working as a Software Engineer at a Start Up — Forage",
     "Technology Consulting Simulation — PwC",
@@ -258,7 +258,7 @@ function NSMonogram() {
       href="https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a"
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Nikhil Chary Sriramoju"
+      aria-label="NIKHIL CHARY SRIRAMOJU"
       className="fixed top-3 right-3 z-30 w-8 h-8 flex items-center justify-center rounded-lg bg-zinc-900/70 backdrop-blur border border-zinc-800 text-zinc-500 hover:text-cyan-300 hover:border-zinc-700 transition-colors"
     >
       <span className="font-mono text-[11px] font-semibold tracking-tight">NS</span>
@@ -348,7 +348,7 @@ function SiteFooter({ onAbout }) {
         <div className="mt-10 pt-5 border-t border-zinc-800/70 flex flex-col-reverse sm:flex-row items-center justify-between gap-3">
           <span className="text-[11px] font-mono text-zinc-600">
             © {new Date().getFullYear()} Medha — built by{" "}
-            <span className="text-cyan-400/80">Nikhil Chary Sriramoju</span>
+            <span className="text-cyan-400/80">NIKHIL CHARY SRIRAMOJU</span>
           </span>
           <span className="text-[10px] font-mono text-zinc-700 tracking-wide">
             v3.0 web · agentic looping AI
@@ -368,7 +368,7 @@ function AboutPanel({ onClose }) {
       >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2 text-cyan-300 font-mono font-bold">
-            <User size={18} /> Nikhil Chary Sriramoju
+            <User size={18} /> NIKHIL CHARY SRIRAMOJU 
           </div>
           <button onClick={onClose} className="text-zinc-500 hover:text-zinc-300">
             <X size={18} />
