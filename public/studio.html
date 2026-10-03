@@ -77,7 +77,7 @@ dialog label{display:block;margin:.7rem 0 .2rem;font-weight:600}
 dialog input,dialog select,dialog textarea{width:100%;font:inherit;font-size:16px;padding:.5rem;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
 dialog textarea{font:.8rem "JetBrains Mono",monospace}
 dialog small{color:var(--mute);display:block;margin-top:.3rem}
-@media(min-width:960px){
+@media(min-width:1180px){
  main{gap:1rem;padding:0 1rem}
  #chatcol{flex:1 1 52%}#chatcol,body[data-tab=files] #chatcol,body[data-tab=prev] #chatcol{display:flex}
  #side,body[data-tab=files] #side,body[data-tab=prev] #side{display:block;flex:1 1 48%;border-left:1px solid var(--line);padding-left:1rem}
@@ -87,13 +87,50 @@ dialog small{color:var(--mute);display:block;margin-top:.3rem}
 }
 @media(max-width:520px){h1{font-size:1.2rem}#phase{margin-left:0;order:3}.hb{margin-left:auto}.msg{max-width:96%}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;scroll-behavior:auto!important}}
+
+/* v4: Claude-style shell */
+#app{flex:1;min-height:0;display:flex}
+#stage{flex:1;min-width:0;min-height:0;display:flex;flex-direction:column}
+#nav{display:flex;flex-direction:column;gap:.6rem;width:min(300px,86vw);padding:calc(.8rem + env(safe-area-inset-top,0px)) .8rem .8rem;background:var(--solid);border-right:1px solid var(--line);position:fixed;inset:0 auto 0 0;z-index:30;transform:translateX(-102%);transition:transform .2s}
+body.nav #nav{transform:none}
+#scrim{display:none;position:fixed;inset:0;background:#0009;z-index:20}body.nav #scrim{display:block}
+#hsearch{width:100%;font:inherit;font-size:16px;padding:.5rem .7rem;border-radius:10px;border:1px solid var(--line);background:var(--bg);color:var(--ink)}
+#hlist{flex:1;overflow-y:auto;min-height:0}
+#hlist h4{margin:.8rem .3rem .2rem;font-size:.7rem;text-transform:uppercase;letter-spacing:.08em;color:var(--mute)}
+.hi{display:flex;border-radius:10px}.hi.on,.hi:hover{background:var(--panel)}
+.hi .ht{flex:1;min-width:0;text-align:left;border:0;background:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-height:38px}
+.hi .hd{border:0;background:none;color:var(--mute);min-height:38px;padding:0 .7rem}
+.none{color:var(--mute);font-size:.85rem;padding:.3rem}
+.prof{display:flex;align-items:center;gap:.7rem;text-align:left;padding:.6rem;border-radius:14px}
+.prof b{display:block;font-size:.85rem;line-height:1.2}.prof small{color:var(--mute);font-size:.72rem}
+.av{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:800;background:conic-gradient(from 200deg,var(--vi),var(--tl),var(--vi));color:#0E0B2E;flex:none}.av.big{width:56px;height:56px;font-size:1.2rem}
+#log,#f{max-width:780px;width:100%;margin-inline:auto}
+#menu{padding:.4rem .75rem;font-size:1.1rem}
+.msg hr{border:0;border-top:1px solid var(--line);margin:.6rem 0}
+.p2{display:flex;gap:.9rem;align-items:center;margin-bottom:.8rem}.p2 h2{margin:0;font-size:1.25rem}.p2 p{margin:.1rem 0 0;color:var(--mute);font-size:.85rem}
+.lk{display:flex;flex-wrap:wrap;gap:.5rem}
+.btn{display:inline-flex;align-items:center;min-height:40px;padding:.4rem .9rem;border:1px solid var(--line);border-radius:10px;text-decoration:none;color:var(--ink);background:var(--panel)}
+.chips{display:flex;flex-wrap:wrap;gap:.35rem}.chips span{font-size:.75rem;padding:.2rem .6rem;border:1px solid var(--line);border-radius:99px;color:var(--mute)}
+.pj{margin:.55rem 0}.pj b{display:block}.pj span{color:var(--mute);font-size:.85rem}
+details{border-top:1px solid var(--line);padding:.5rem 0}summary{cursor:pointer;font-weight:600}dialog ul{padding-left:1.2rem;margin:.4rem 0}
+@media(min-width:960px){#nav{position:static;transform:none;width:280px;flex:none;z-index:auto;padding-top:.8rem}#menu,#scrim{display:none!important}}
 </style>
 </head>
 <body data-tab="chat">
+<div id="app">
+<aside id="nav" aria-label="Chat history">
+  <button id="newChat" type="button" class="ok">+ New chat</button>
+  <input id="hsearch" type="search" placeholder="Search chats" aria-label="Search chats">
+  <div id="hlist"></div>
+  <button id="me" type="button" class="prof" aria-label="Open builder profile"><span class="av">NC</span><span><b>Nikhil Chary Sriramoju</b><small>View profile and credentials</small></span></button>
+</aside>
+<div id="scrim"></div>
+<div id="stage">
 <header>
+  <button id="menu" type="button" aria-label="Open chat history">&#9776;</button>
   <h1><span class="orb"></span>Medha <small>मेधा</small></h1>
   <nav id="phase" aria-label="Agent phase"><i data-p="plan">Plan</i><i data-p="act">Act</i><i data-p="observe">Observe</i><i data-p="done">Done</i></nav>
-  <div class="hb"><button id="themeBtn" type="button" aria-label="Switch light or dark theme">Theme</button><button id="aboutBtn" type="button">About</button><button id="cfgBtn" type="button">Settings</button></div>
+  <div class="hb"><button id="themeBtn" type="button" aria-label="Switch light or dark theme">Theme</button><button id="cfgBtn" type="button">Settings</button></div>
   <div id="meter">Ready</div>
 </header>
 <div id="tabs"><button data-t="chat">Chat</button><button data-t="files">Files</button><button data-t="prev">Preview</button></div>
@@ -108,6 +145,7 @@ dialog small{color:var(--mute);display:block;margin-top:.3rem}
   </aside>
 </main>
 <footer id="credit">Designed and Developed by <b>NIKHIL CHARY SRIRAMOJU</b></footer>
+</div></div>
 <dialog id="cfg"><form method="dialog">
   <h2>Settings</h2>
   <label for="k1">Groq API key</label><input id="k1" type="password" autocomplete="off" placeholder="gsk_...">
@@ -118,14 +156,24 @@ dialog small{color:var(--mute);display:block;margin-top:.3rem}
   <label for="mcp">MCP servers (https URLs, one per line)</label><textarea id="mcp" rows="3"></textarea><small>Free default: DeepWiki (docs for any public GitHub repo). Some servers block browsers (CORS).</small><small id="stat"></small>
   <div class="row"><button value="save" class="ok">Save</button><button value="cancel">Close</button></div>
 </form></dialog>
-<dialog id="about"><form method="dialog">
-  <h2>Medha Studio <small>v3.0</small></h2>
-  <p>An agentic AI engineer. It plans, asks what it needs, builds, previews and ships software. It runs in your browser on the free Groq API, with MCP tools and the GitHub API.</p>
-  <h3>Designed and developed by</h3>
-  <p><b>NIKHIL CHARY SRIRAMOJU</b><br>B.Tech Final Year, Computer Science and Engineering</p>
-  <p><a href="https://github.com/Nikhil-creat" target="_blank" rel="noopener">GitHub</a> &middot; <a href="https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a" target="_blank" rel="noopener">LinkedIn</a></p>
-  <h3>Good to know</h3>
-  <ul><li>API keys stay in this browser only.</li><li>GitHub writes, overwrites and new MCP tools need your approval.</li><li>AI can make mistakes. Review generated code before you publish.</li><li>Enter sends. Shift+Enter adds a line. Say "continue" after a rate-limit pause.</li></ul>
+<dialog id="profile"><form method="dialog">
+  <div class="p2"><span class="av big">NC</span><div><h2>Nikhil Chary Sriramoju</h2><p>B.Tech Final Year, Computer Science and Engineering</p></div></div>
+  <div class="lk"><a class="btn" href="https://github.com/Nikhil-creat" target="_blank" rel="noopener">GitHub</a><a class="btn" href="https://in.linkedin.com/in/nikhil-chary-sriramoju-95041b38a" target="_blank" rel="noopener">LinkedIn</a><a class="btn" href="mailto:sriramojunikhil66@gmail.com">Email</a></div>
+  <h3>Focus</h3>
+  <div class="chips"><span>Agentic AI</span><span>RAG</span><span>LangGraph</span><span>Cybersecurity</span><span>Zero trust</span><span>FastAPI</span><span>React / Next.js</span><span>Docker</span><span>PyTorch CNN</span><span>Redis / Qdrant</span><span>Prometheus / Grafana</span></div>
+  <h3>Selected projects</h3>
+  <div class="pj"><b>AD-CSF</b><span>Autonomous distributed cognitive security fabric: distributed systems, post-quantum crypto, agentic zero trust, RAG, CNN.</span></div>
+  <div class="pj"><b>EcoGrid-AI</b><span>Self-healing decentralized microgrid sentinel: Docker microservices, edge CNN, agentic RAG, Prometheus and Grafana.</span></div>
+  <div class="pj"><b>OptiMarket X</b><span>Multi-agent commerce mesh for D2C brands: FastAPI, LangGraph, Qdrant RAG, PyTorch CNN, Redis Streams, Next.js.</span></div>
+  <div class="pj"><b>LLMOps Nexus</b><span>Semantic caching layer for LLM APIs: FastAPI, Redis and Qdrant, Prometheus, Docker.</span></div>
+  <div class="pj"><b>Aether AI Screenshot Studio</b><span>CNN and RAG powered multi-agent screenshot editor and code exporter.</span></div>
+  <div class="pj"><b>Veritas</b><span>AI content authenticity checker: image ELA, metadata forensics, text stylometry.</span></div>
+  <h3>Certifications</h3>
+  <details><summary>Job simulations (Forage)</summary><ul><li>Software Engineer at a Start Up</li><li>PwC: Technology Consulting; Cyber Security Consulting</li><li>Datacom: Automation AI Accelerator; Cyber Security Operations</li><li>Clifford Chance: Cyber Security</li><li>British Airways: Data Science</li><li>Latham &amp; Watkins: Data and Technology Transactions</li><li>Deloitte: Data Analytics; Technology</li></ul></details>
+  <details><summary>NASSCOM / Skill India Digital Hub</summary><ul><li>IT Forensic Analyst</li><li>Product Manager, Web &amp; Mobile</li><li>Cloud Infrastructure Analyst</li><li>Analyst Endpoint Security, Cybersecurity</li><li>Blockchain Architect</li></ul></details>
+  <details><summary>Programs and internships</summary><ul><li>Data Analytics internship, Thiranex</li><li>Reliance Foundation Skilling Academy: Industry 4.0 Robotics Systems (90 hrs), IoT Security Specialist, AI-ML Engineer Foundation</li><li>NIELIT / Skill India: Yuva AI for All (NSQF Level 2)</li><li>Mastering Power BI, PHN Technology</li><li>How to Get a Job, UNICEF Yuwaah</li></ul></details>
+  <h3>About Medha Studio <small>v4.0</small></h3>
+  <ul><li>Runs in your browser on the free Groq API, with MCP tools and the GitHub API.</li><li>Keys and chat history stay on this device only.</li><li>GitHub writes, overwrites and new MCP tools need your approval.</li><li>AI can make mistakes. Review generated code before you publish.</li></ul>
   <div class="row"><button value="close" class="ok">Close</button></div>
 </form></dialog>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
@@ -137,7 +185,7 @@ let cfg={mcp:['https://mcp.deepwiki.com/mcp'],...store.get('medha_cfg',{groq:'',
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const log=$('#log');
 const el=(cls,html)=>{const d=document.createElement('div');d.className=cls;d.innerHTML=html;log.append(d);log.scrollTop=log.scrollHeight;return d};
-const fmt=t=>esc(t).replace(/```(?:\w+)?\n?([\s\S]*?)```/g,'<pre class="c"><button class="cp" type="button">Copy</button>$1</pre>').replace(/^#{1,3} (.+)$/gm,'<b>$1</b>').replace(/^[-*] (.+)$/gm,'&bull; $1').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>');
+const fmt=t=>esc(t).replace(/```(?:\w+)?\n?([\s\S]*?)```/g,'<pre class="c"><button class="cp" type="button">Copy</button>$1</pre>').replace(/^---+$/gm,'<hr>').replace(/\[([^\]]+)\]\((https?:[^)\s]+)\)/g,'<a href="$2" target="_blank" rel="noopener">$1</a>').replace(/^#{1,3} (.+)$/gm,'<b>$1</b>').replace(/^[-*] (.+)$/gm,'&bull; $1').replace(/`([^`]+)`/g,'<code>$1</code>').replace(/\*\*([^*]+)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>');
 const b64=s=>btoa(unescape(encodeURIComponent(s))),unb64=s=>decodeURIComponent(escape(atob(s.replace(/\n/g,''))));
 const cut=(s,n=5000)=>s.length>n?s.slice(0,n)+`\n...[truncated ${s.length-n} chars]`:s;
 let T={steps:0,tools:0,t0:0};
@@ -154,7 +202,7 @@ function bundle(){let h=fs['index.html'];if(!h)return null;
  h=h.replace(/<link[^>]+href=["']([^"']+\.css)["'][^>]*>/g,(m,p)=>p in fs?`<style>${fs[p]}</style>`:m);
  return h.replace(/<script([^>]*?)\ssrc=["']([^"']+)["']([^>]*)><\/script>/g,(m,a,p,b)=>p in fs?`<script${a}${b}>${fs[p].replace(/<\/script/g,'<\\/script')}<\/script>`:m)}
 function renderPreview(){const h=bundle();$('#frame').srcdoc=h||'<p style="font:16px system-ui;padding:1rem">No index.html in the workspace yet.</p>';return !!h}
-function tab(t){document.body.dataset.tab=t;const eff=(matchMedia('(min-width:960px)').matches&&t==='chat')?'files':t;document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===eff));if(t==='prev')renderPreview()}
+function tab(t){document.body.dataset.tab=t;const eff=(matchMedia('(min-width:1180px)').matches&&t==='chat')?'files':t;document.querySelectorAll('#tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.t===eff));if(t==='prev')renderPreview()}
 
 // ---------- tools ----------
 const gh=async(path,opt={})=>{const r=await fetch('https://api.github.com'+path,{...opt,headers:{Accept:'application/vnd.github+json',...(cfg.gh?{Authorization:'Bearer '+cfg.gh}:{}),...opt.headers}});const j=await r.json().catch(()=>({}));if(!r.ok)throw new Error(`GitHub ${r.status}: ${j.message||''}`);return j};
@@ -330,7 +378,7 @@ async function submit(text){
  document.querySelector('.empty')?.remove();
  el('msg me',esc(text));busy=true;stop=false;T={steps:0,tools:0,t0:Date.now()};document.body.classList.add('busy');$('#go').textContent='Stop';
  try{await agent(text)}catch(e){phase('');el('msg bot','Error: '+esc(e.message))}
- busy=false;meter();document.body.classList.remove('busy');$('#go').textContent='Run'}
+ busy=false;meter();saveChat();document.body.classList.remove('busy');$('#go').textContent='Run'}
 $('#f').onsubmit=e=>{e.preventDefault();if(busy){stop=true;return}const v=$('#q').value;$('#q').value='';$('#q').style.height='auto';submit(v)};
 $('#q').onkeydown=e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();$('#f').requestSubmit()}};
 $('#q').oninput=e=>{e.target.style.height='auto';e.target.style.height=e.target.scrollHeight+'px'};
@@ -340,8 +388,10 @@ document.querySelectorAll('#tabs button').forEach(b=>b.onclick=()=>tab(b.dataset
 $('#zip').onclick=async()=>{if(!window.JSZip)return alert('JSZip did not load. Check your connection.');const z=new JSZip();for(const p in fs)z.file(p,fs[p]);const a=document.createElement('a');a.href=URL.createObjectURL(await z.generateAsync({type:'blob'}));a.download='medha-project.zip';a.click()};
 $('#clr').onclick=()=>{if(confirm('Delete all workspace files?')){fs={};persist();$('#view').textContent='Select a file to read it.'}};
 const TL=[['Business website','Asks for your shop details, then builds a publish-ready site','Build a professional website for my business. Ask me the details first.'],['Portfolio website','A personal site with projects, skills and contact','Build a personal portfolio website for me. Ask me the details first.'],['Full-stack scaffold','FastAPI + React, Dockerfile, tests, README','Scaffold a FastAPI + React project with a Dockerfile, tests and a README'],['API and database','REST API design, schema, code and docs','Design a REST API with a database schema, then write the code and docs'],['Research a repo','Uses DeepWiki MCP to explain any public repo','Use DeepWiki to explain how vercel/next.js routing works'],['Ship to GitHub','Creates a repo and pushes after you approve','Create a GitHub repo called my-site and push the workspace']];
-const e0=el('empty','<h2>What should Medha build?</h2><p>Plans, asks what it needs, builds, previews, and checks with you before touching GitHub.</p><div class="tiles"></div><small class="by">Designed and developed by NIKHIL CHARY SRIRAMOJU</small>');
-TL.forEach(([a,b,p])=>{const x=document.createElement('button');x.innerHTML=`<b>${a}</b><span>${b}</span>`;x.onclick=()=>submit(p);e0.querySelector('.tiles').append(x)});
+function welcome(){const hr=new Date().getHours(),g=hr<12?'Good morning':hr<17?'Good afternoon':'Good evening';
+ const e0=el('empty',`<h2>${g}. What should we build?</h2><p>Plans, asks what it needs, builds, previews, and checks with you before touching GitHub.</p><div class="tiles"></div><small class="by">Designed and developed by NIKHIL CHARY SRIRAMOJU</small>`);
+ TL.forEach(([a,b,p])=>{const x=document.createElement('button');x.innerHTML=`<b>${a}</b><span>${b}</span>`;x.onclick=()=>submit(p);e0.querySelector('.tiles').append(x)})}
+welcome();
 
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 if(SR){const rec=new SR();rec.lang='en-IN';rec.onresult=e=>{$('#q').value+=($('#q').value?' ':'')+e.results[0][0].transcript};rec.onend=()=>$('#mic').classList.remove('on');$('#mic').onclick=()=>{try{rec.start();$('#mic').classList.add('on')}catch{}}}else $('#mic').hidden=true;
@@ -349,10 +399,36 @@ renderFiles();tab('chat');if(!cfg.groq)$('#cfg').showModal();else{loadModels();c
 
 document.documentElement.dataset.theme=store.get('medha_theme','dark');
 $('#themeBtn').onclick=()=>{const n=document.documentElement.dataset.theme==='dark'?'light':'dark';document.documentElement.dataset.theme=n;store.set('medha_theme',n);document.querySelector('meta[name=theme-color]').content=n==='dark'?'#0A0B1A':'#F3F4FB'};
-$('#aboutBtn').onclick=()=>$('#about').showModal();
+$('#me').onclick=()=>{navClose();$('#profile').showModal()};
 $('#exp').onclick=()=>{const md=[...log.children].map(n=>n.classList.contains('me')?'**You:** '+n.textContent:n.classList.contains('bot')?'**Medha:** '+n.innerText:n.classList.contains('step')?'> '+n.innerText.replace(/\n/g,' '):'').filter(Boolean).join('\n\n');const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown'}));a.download='medha-chat.md';a.click()};
 log.addEventListener('click',e=>{const b=e.target.closest('.cp');if(!b)return;navigator.clipboard?.writeText([...b.parentNode.childNodes].filter(n=>n!==b).map(n=>n.textContent).join(''));b.textContent='Copied';setTimeout(()=>b.textContent='Copy',1200)});
 meter();
+
+// ---------- chat history (stored on this device) ----------
+let chats=store.get('medha_chats',[]),cur=null;
+const navClose=()=>document.body.classList.remove('nav');
+function saveChat(){if(!hist.length)return;
+ let c=chats.find(x=>x.id===cur);
+ if(!c){cur=Date.now().toString(36)+Math.random().toString(36).slice(2,5);c={id:cur,title:(hist.find(m=>m.role==='user')?.content||'Chat').slice(0,60)};chats.unshift(c)}
+ c.ts=Date.now();c.hist=hist;c.html=log.innerHTML;c.fs=fs;
+ chats.sort((a,b)=>b.ts-a.ts);chats=chats.slice(0,25);
+ let j=JSON.stringify(chats);while(j.length>3.5e6&&chats.length>1){chats.pop();j=JSON.stringify(chats)}
+ try{localStorage.setItem('medha_chats',j)}catch{}renderHistory()}
+function renderHistory(){const q=$('#hsearch').value.toLowerCase(),L=$('#hlist'),d0=new Date().setHours(0,0,0,0);L.innerHTML='';let last='';
+ chats.filter(c=>c.title.toLowerCase().includes(q)).forEach(c=>{const g=c.ts>=d0?'Today':c.ts>=d0-864e5?'Yesterday':'Earlier';
+  if(g!==last){L.insertAdjacentHTML('beforeend',`<h4>${g}</h4>`);last=g}
+  const r=document.createElement('div');r.className='hi'+(c.id===cur?' on':'');
+  r.innerHTML=`<button class="ht" type="button">${esc(c.title)}</button><button class="hd" type="button" aria-label="Delete chat">&times;</button>`;
+  r.firstChild.onclick=()=>openChat(c.id);
+  r.lastChild.onclick=()=>{if(confirm('Delete this chat?')){chats=chats.filter(x=>x.id!==c.id);if(cur===c.id)cur=null;store.set('medha_chats',chats);renderHistory()}};
+  L.append(r)});
+ if(!L.children.length)L.innerHTML='<p class="none">No chats yet.</p>'}
+function openChat(id){if(busy)return;const c=chats.find(x=>x.id===id);if(!c)return;
+ cur=id;hist=c.hist;fs=c.fs||{};persist();log.innerHTML=c.html;renderPreview();tab('chat');navClose();log.scrollTop=log.scrollHeight;renderHistory()}
+function newChat(){if(busy)return;saveChat();cur=null;hist=[];fs={};persist();log.innerHTML='';welcome();tab('chat');navClose();renderHistory()}
+$('#newChat').onclick=newChat;$('#hsearch').oninput=renderHistory;
+$('#menu').onclick=()=>document.body.classList.toggle('nav');$('#scrim').onclick=navClose;
+renderHistory();
 
 </script>
 </body>
